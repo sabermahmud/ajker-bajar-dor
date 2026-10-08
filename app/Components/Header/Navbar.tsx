@@ -1,50 +1,87 @@
 import Image from "next/image";
 import { BsListNested } from "react-icons/bs";
+import Header from "../CurrentDate";
 
 interface NavDataTypes {
+  id: string
   nameBn: string;
 }
 
 const navDataPromise = async (): Promise<NavDataTypes[]> => {
   const res = await fetch(
-    "https://api.api-store.workers.dev/api/bazardor/categories",
+    "https://api.api-store.workers.dev/api/bazardor",
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch economy news");
+    throw new Error("Failed to fetch categories");
   }
+
   return res.json();
 };
 
 export default async function Navbar() {
-  const options = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  const date = new Date().toLocaleDateString("bn", options);
+  
+
 
   const navData = await navDataPromise();
-  console.log(navData);
+  console.log(navData)
 
   return (
-    <>
-      <div className="flex justify-between items-center ">
-        {/* logo */}
-        <div className="flex items-center">
-          <Image src={"/logo.png"} alt="nav-logo" height={100} width={100} />
-          <div>
-            <h1 className="text-xl font-bold">বাজার দর</h1>
-            <p>{date}</p>
+    <header className="border-b bg-base-100">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Top Header */}
+        <div className="flex min-h-20 items-center justify-between gap-4">
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-3">
+            <Image
+              src="/logo.png"
+              alt="বাজার দর"
+              width={64}
+              height={64}
+              priority
+              className="h-14 w-14 object-contain"
+            />
+
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-base-content">
+                বাজার দর
+              </h1>
+
+              <div className="mt-0.5 text-xs font-medium text-base-content/60 sm:text-sm">
+                <Header/>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button className="btn btn-sm btn-outline sm:btn-md">
+              সাইন ইন
+            </button>
+
+            <button className="btn btn-sm btn-primary sm:btn-md">
+              সাইন আপ
+            </button>
           </div>
         </div>
-        {/* btns */}
-        <div className="flex gap-4">
-          <button className="btn btn-primary">সাইন ইন</button>
-          <button className="btn btn-success">সাইন আপ</button>
-        </div>
+
+        {/* Navigation */}
+        <nav className="flex items-center gap-2 overflow-x-auto py-3">
+          <button className="btn btn-sm btn-ghost ">
+            <BsListNested size={20} />
+            ক্যাটাগরি
+          </button>
+
+          {/* {navData.map((item) => (
+            <button
+              key={item.id}
+              className="btn btn-sm btn-ghost shrink-0 font-medium"
+            >
+              {item.nameBn}
+            </button>
+          ))} */}
+        </nav>
       </div>
-    </>
+    </header>
   );
 }

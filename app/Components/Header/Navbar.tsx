@@ -3,13 +3,15 @@ import { BsListNested } from "react-icons/bs";
 import Header from "../CurrentDate";
 
 interface NavDataTypes {
-  id: string
+  id: string;
   nameBn: string;
 }
 
 const navDataPromise = async (): Promise<NavDataTypes[]> => {
+  "use cache";
+
   const res = await fetch(
-    "https://api.api-store.workers.dev/api/bazardor",
+    "https://api.api-store.workers.dev/api/bazardor/categories"
   );
 
   if (!res.ok) {
@@ -20,11 +22,7 @@ const navDataPromise = async (): Promise<NavDataTypes[]> => {
 };
 
 export default async function Navbar() {
-  
-
-
   const navData = await navDataPromise();
-  console.log(navData)
 
   return (
     <header className="border-b bg-base-100">
@@ -48,7 +46,7 @@ export default async function Navbar() {
               </h1>
 
               <div className="mt-0.5 text-xs font-medium text-base-content/60 sm:text-sm">
-                <Header/>
+                <Header />
               </div>
             </div>
           </div>
@@ -67,19 +65,19 @@ export default async function Navbar() {
 
         {/* Navigation */}
         <nav className="flex items-center gap-2 overflow-x-auto py-3">
-          <button className="btn btn-sm btn-ghost ">
+          <button className="btn btn-sm btn-ghost">
             <BsListNested size={20} />
             ক্যাটাগরি
           </button>
 
-          {/* {navData.map((item) => (
+          {navData.map((item) => (
             <button
               key={item.id}
               className="btn btn-sm btn-ghost shrink-0 font-medium"
             >
               {item.nameBn}
             </button>
-          ))} */}
+          ))}
         </nav>
       </div>
     </header>

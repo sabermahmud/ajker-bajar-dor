@@ -2,6 +2,7 @@ import Image from "next/image";
 import { BsListNested } from "react-icons/bs";
 import CurrentDate from "../CurrentDate";
 import { Suspense } from "react";
+import Link from "next/link";
 
 interface NavDataTypes {
   id: string;
@@ -12,7 +13,7 @@ const navDataPromise = async (): Promise<NavDataTypes[]> => {
   "use cache";
 
   const res = await fetch(
-    "https://api.api-store.workers.dev/api/bazardor/categories"
+    "https://api.api-store.workers.dev/api/bazardor/categories",
   );
 
   if (!res.ok) {
@@ -47,8 +48,8 @@ export default async function Navbar() {
               </h1>
 
               <div className="mt-0.5 text-xs font-medium text-base-content/60 sm:text-sm">
-              <Suspense fallback={<p>তারিখ লোড হচ্ছে...</p>}>
-                <CurrentDate />
+                <Suspense fallback={<p>তারিখ লোড হচ্ছে...</p>}>
+                  <CurrentDate />
                 </Suspense>
               </div>
             </div>
@@ -56,13 +57,17 @@ export default async function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <button className="btn btn-sm btn-outline sm:btn-md">
-              সাইন ইন
-            </button>
+            <Link href={"/login"}>
+              <button className="btn btn-sm btn-outline sm:btn-md">
+                সাইন ইন
+              </button>
+            </Link>
 
-            <button className="btn btn-sm btn-primary sm:btn-md">
-              সাইন আপ
-            </button>
+            <Link href={"/signup"}>
+              <button className="btn btn-sm btn-primary sm:btn-md">
+                সাইন আপ
+              </button>
+            </Link>
           </div>
         </div>
 

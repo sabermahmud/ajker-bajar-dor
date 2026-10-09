@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Sans } from "next/font/google";
+import { Noto_Serif_Bengali } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Components/Header/Navbar";
 import Footer from "./Components/Footer/Footer";
 
-const notoSans = Noto_Sans({
-  variable: "--font-noto-sans",
+const notoSerifBengali = Noto_Serif_Bengali({
+  subsets:["latin", "bengali"]
 });
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${notoSans} h-full antialiased`}>
+    <html lang="en" data-theme="light" className={`${notoSerifBengali.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col ">
         <header className="container mx-auto">
           <nav>

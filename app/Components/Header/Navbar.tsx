@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { BsListNested } from "react-icons/bs";
-import Header from "../CurrentDate";
+import CurrentDate from "../CurrentDate";
+import { Suspense } from "react";
 
 interface NavDataTypes {
   id: string;
@@ -46,7 +47,9 @@ export default async function Navbar() {
               </h1>
 
               <div className="mt-0.5 text-xs font-medium text-base-content/60 sm:text-sm">
-                <Header />
+              <Suspense fallback={<p>তারিখ লোড হচ্ছে...</p>}>
+                <CurrentDate />
+                </Suspense>
               </div>
             </div>
           </div>

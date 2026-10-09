@@ -1,20 +1,31 @@
+
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+function subscribe() {
+  return () => {};
+}
+
+function getClientSnapshot() {
+  return new Date().toLocaleDateString("bn-BD", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function getServerSnapshot() {
+  return "";
+}
 
 export default function CurrentDate() {
-  const [date, setDate] = useState("");
+  const date = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot
+  );
 
-  useEffect(() => {
-    setDate(
-      new Date().toLocaleDateString("bn-BD", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    );
-  }, []);
-
-  return <p>{date}</p>;
+  return <p>{date || "তারিখ লোড হচ্ছে..."}</p>;
 }

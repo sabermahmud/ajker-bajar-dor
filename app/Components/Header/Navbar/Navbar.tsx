@@ -70,7 +70,7 @@ export default async function Navbar() {
           {navData.map((item) => (
             <button
               key={item.id}
-              className="btn btn-sm btn-ghost shrink-0 font-medium"
+              className="btn btn-sm btn-ghost shrink-0 font-medium text-sm md:text-base"
             >
               {item.nameBn}
             </button>

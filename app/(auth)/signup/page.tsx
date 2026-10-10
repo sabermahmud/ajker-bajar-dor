@@ -63,7 +63,7 @@ export default function SignUpPage() {
       }
 
       setSuccessMessage("অ্যাকাউন্ট তৈরি সফল হয়েছে।");
-      toast.success(`${data.user.name}অ্যাকাউন্ট তৈরি সফল হয়েছে।`)
+      toast.success(`${data.user.name} ! অ্যাকাউন্ট তৈরি সফল হয়েছে।`)
 
       router.push("/");
       form.reset();

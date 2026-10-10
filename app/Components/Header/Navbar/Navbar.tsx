@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { BsListNested } from "react-icons/bs";
-import CurrentDate from "../CurrentDate";
+import CurrentDate from "../../CurrentDate";
 import { Suspense } from "react";
-import Link from "next/link";
+import NavAuthAction from "./NavAuthAction";
 
 interface NavDataTypes {
   id: string;
@@ -54,20 +54,9 @@ export default async function Navbar() {
               </div>
             </div>
           </div>
-
           {/* Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link href={"/login"}>
-              <button className="btn btn-sm btn-outline sm:btn-md">
-                সাইন ইন
-              </button>
-            </Link>
-
-            <Link href={"/signup"}>
-              <button className="btn btn-sm btn-primary sm:btn-md">
-                সাইন আপ
-              </button>
-            </Link>
+          <div>
+            <NavAuthAction />
           </div>
         </div>
 

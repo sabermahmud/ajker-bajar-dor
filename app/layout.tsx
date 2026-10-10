@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Noto_Serif_Bengali } from "next/font/google";
 import "./globals.css";
-import Navbar from "./Components/Header/Navbar";
+import Navbar from "./Components/Header/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
+import { ToastContainer } from "react-toastify";
 
 const notoSerifBengali = Noto_Serif_Bengali({
   subsets:["latin", "bengali"]
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Navbar />
           </nav>
         </header>
+        <ToastContainer/>
         <main className="container mx-auto">{children}</main>
         <footer className="container mx-auto">
           <Footer />

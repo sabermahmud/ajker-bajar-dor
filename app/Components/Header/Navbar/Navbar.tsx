@@ -59,7 +59,7 @@ export default async function Navbar() {
             </div>
           </Link>
           {/* Actions */}
-          <div>
+          <div className="px-2">
             <NavAuthAction />
           </div>
         </div>

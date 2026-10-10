@@ -1,151 +1,155 @@
 import { ProductData } from "../types/products-type";
 import { Suspense } from "react";
 import { FaCaretDown, FaCaretUp, FaMinus } from "react-icons/fa";
-
-const pulseDataPromise = async (): Promise<ProductData[]> => {
+const oilDataPromise = async (): Promise<ProductData[]> => {
   const res = await fetch(
-    "https://openapi.programming-hero.com/api/bazardor/products?category=dal",
+    "https://openapi.programming-hero.com/api/bazardor/products?category=tel",
   );
-
   if (!res.ok) {
-    throw new Error("Failed to fetch pulse data");
+    throw new Error("Failed to fetch oil data");
   }
-
   const data: ProductData[] = await res.json();
   return data;
 };
-
-async function PulseList() {
-  const pulseData = await pulseDataPromise();
-
-  if (pulseData.length === 0) {
+async function OilList() {
+  const oilData = await oilDataPromise();
+  if (oilData.length === 0) {
     return (
       <p className="rounded-2xl border border-dashed border-gray-300 py-12 text-center text-gray-500">
-        কোনো ডালের তথ্য পাওয়া যায়নি।
+        {" "}
+        কোনো তেলের তথ্য পাওয়া যায়নি।{" "}
       </p>
     );
   }
-
   return (
     <section className="mt-8">
+      {" "}
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        {" "}
         <div>
+          {" "}
           <p className="text-sm font-semibold text-emerald-600">
-            বাজারদর আপডেট
-          </p>
+            {" "}
+            বাজারদর আপডেট{" "}
+          </p>{" "}
           <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-            ডালের বাজারদর
-          </h1>
+            {" "}
+            তেলের বাজারদর{" "}
+          </h1>{" "}
           <p className="mt-2 text-sm text-gray-500">
-            প্রতিদিনের ডালের দাম এক নজরে দেখুন।
-          </p>
-        </div>
-
+            {" "}
+            প্রতিদিনের তেলের দাম এক নজরে দেখুন।{" "}
+          </p>{" "}
+        </div>{" "}
         <span className="w-fit rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
-          মোট {pulseData.length.toLocaleString("bn-BD")}টি পণ্য
-        </span>
-      </div>
-
+          {" "}
+          মোট {oilData.length.toLocaleString("bn-BD")}টি পণ্য{" "}
+        </span>{" "}
+      </div>{" "}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {pulseData.map((pulse) => {
+        {" "}
+        {oilData.map((oil) => {
           const priceChange =
-            pulse.yesterday > 0
-              ? ((pulse.today - pulse.yesterday) / pulse.yesterday) * 100
+            oil.yesterday > 0
+              ? ((oil.today - oil.yesterday) / oil.yesterday) * 100
               : 0;
-
           const isPriceUp = priceChange > 0;
           const isPriceDown = priceChange < 0;
-
           return (
             <article
-              key={pulse.id}
+              key={oil.id}
               className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl"
             >
+              {" "}
               <div className="flex items-center gap-4">
+                {" "}
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-4xl transition-colors group-hover:bg-emerald-100">
-                  {pulse.image}
-                </div>
-
+                  {" "}
+                  {oil.image}{" "}
+                </div>{" "}
                 <div className="min-w-0 flex-1">
+                  {" "}
                   <h2 className="truncate text-lg font-bold text-gray-800">
-                    {pulse.nameBn}
-                  </h2>
-
+                    {" "}
+                    {oil.nameBn}{" "}
+                  </h2>{" "}
                   <p className="mt-1 text-sm text-gray-500">
-                    {pulse.categoryNameBn}
-                  </p>
-
+                    {" "}
+                    {oil.categoryNameBn}{" "}
+                  </p>{" "}
                   <span className="mt-2 inline-block rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
-                    প্রতি {pulse.unit === "kg" ? "কেজি" : pulse.unit}
-                  </span>
-                </div>
-              </div>
-
-              <div className="my-5 border-t border-dashed border-gray-200" />
-
+                    {" "}
+                    প্রতি {oil.unit === "kg" ? "কেজি" : oil.unit}{" "}
+                  </span>{" "}
+                </div>{" "}
+              </div>{" "}
+              <div className="my-5 border-t border-dashed border-gray-200" />{" "}
               <div className="flex items-end justify-between gap-3">
+                {" "}
                 <div>
-                  <p className="text-sm font-medium text-gray-500">আজকের দাম</p>
-
+                  {" "}
+                  <p className="text-sm font-medium text-gray-500">
+                    {" "}
+                    আজকের দাম{" "}
+                  </p>{" "}
                   <div className="mt-1 flex items-baseline gap-1">
+                    {" "}
                     <span className="text-3xl font-extrabold tracking-tight text-gray-900">
-                      ৳{pulse.today.toLocaleString("bn-BD")}
-                    </span>
+                      {" "}
+                      ৳{oil.today.toLocaleString("bn-BD")}{" "}
+                    </span>{" "}
                     <span className="text-sm text-gray-500">
-                      / {pulse.unit === "kg" ? "কেজি" : pulse.unit}
-                    </span>
-                  </div>
-                </div>
-
+                      {" "}
+                      / {oil.unit === "kg" ? "কেজি" : oil.unit}{" "}
+                    </span>{" "}
+                  </div>{" "}
+                </div>{" "}
                 <div
-                  className={`flex shrink-0 items-center gap-1 rounded-xl px-3 py-2 text-sm font-bold ${
-                    isPriceUp
-                      ? "bg-red-50 text-red-600"
-                      : isPriceDown
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "bg-gray-100 text-gray-600"
-                  }`}
+                  className={`flex shrink-0 items-center gap-1 rounded-xl px-3 py-2 text-sm font-bold ${isPriceUp ? "bg-red-50 text-red-600" : isPriceDown ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-600"}`}
                 >
+                  {" "}
                   {isPriceUp ? (
                     <FaCaretUp size={16} />
                   ) : isPriceDown ? (
                     <FaCaretDown size={16} />
                   ) : (
                     <FaMinus size={12} />
-                  )}
-
+                  )}{" "}
                   <span>
+                    {" "}
                     {Math.abs(priceChange).toLocaleString("bn-BD", {
                       maximumFractionDigits: 2,
-                    })}
-                    %
-                  </span>
-                </div>
-              </div>
+                    })}{" "}
+                    %{" "}
+                  </span>{" "}
+                </div>{" "}
+              </div>{" "}
             </article>
           );
-        })}
-      </div>
+        })}{" "}
+      </div>{" "}
     </section>
   );
 }
-
-export default function PulsePage() {
+export default function OilPage() {
   return (
     <main className="mx-auto min-h-screen max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      {" "}
       <Suspense
         fallback={
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {" "}
             {Array.from({ length: 6 }, (_, index) => (
               <div
                 key={index}
                 className="h-56 animate-pulse rounded-2xl border border-gray-200 bg-gray-100"
               />
-            ))}
+            ))}{" "}
           </div>
         }
       >
-        <PulseList />
+        {" "}
+        <OilList />
       </Suspense>
     </main>
   );

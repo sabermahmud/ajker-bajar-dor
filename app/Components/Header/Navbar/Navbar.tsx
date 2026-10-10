@@ -1,7 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BsListNested } from "react-icons/bs";
-import { FaArrowRight } from "react-icons/fa";
 import { Suspense } from "react";
 import CurrentDate from "../../CurrentDate";
 import NavAuthAction from "./NavAuthAction";

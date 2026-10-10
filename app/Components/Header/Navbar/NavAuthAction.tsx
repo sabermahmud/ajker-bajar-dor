@@ -42,13 +42,13 @@ export default function NavAuthAction() {
         {" "}
         <Link
           href="/login"
-          className="btn btn-ghost btn-sm rounded-xl px-4 font-semibold sm:btn-md"
+          className="btn btn-ghost hover:border-2 hover:border-green-700 btn-sm rounded-xl px-4 font-semibold sm:btn-md"
         >
           সাইন ইন{" "}
         </Link>
         <Link
           href="/signup"
-          className="btn btn-primary btn-sm rounded-xl px-4 font-semibold shadow-sm sm:btn-md"
+          className="btn bg-green-700 text-white btn-sm rounded-xl px-4 font-semibold shadow-sm sm:btn-md"
         >
           সাইন আপ
         </Link>
@@ -60,7 +60,6 @@ export default function NavAuthAction() {
 
   return (
     <div className="dropdown dropdown-end">
-      {" "}
       <button
         type="button"
         tabIndex={0}

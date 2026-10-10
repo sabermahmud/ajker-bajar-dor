@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { BsListNested } from "react-icons/bs";
-import CurrentDate from "../../CurrentDate";
-import { Suspense } from "react";
-import NavAuthAction from "./NavAuthAction";
 import Link from "next/link";
+import { BsListNested } from "react-icons/bs";
+import { FaArrowRight } from "react-icons/fa";
+import { Suspense } from "react";
+import CurrentDate from "../../CurrentDate";
+import NavAuthAction from "./NavAuthAction";
+import CategoryNavigation from "./CategoryNavigation";
 
 interface NavDataTypes {
   id: string;
@@ -29,60 +31,68 @@ export default async function Navbar() {
   const navData = await navDataPromise();
 
   return (
-    <header className="border-b bg-base-100">
-      <div>
-        {/* Top Header */}
-        <div className="flex min-h-20 items-center justify-between gap-4">
-          <Link href={"/"}>
-            {/* Logo & Brand */}
-            <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-50 border-b border-base-300/70 bg-base-100/95 shadow-sm backdrop-blur-xl">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Main Header */}
+        <div className="flex min-h-20 items-center justify-between gap-3 py-3">
+          {/* Brand */}
+          <Link
+            href="/"
+            aria-label="বাজার দর - হোম"
+            className="group flex min-w-0 items-center gap-2.5 rounded-xl transition-opacity hover:opacity-80 sm:gap-3"
+          >
+            <div className="relative shrink-0 rounded-2xl bg-success/10 p-1.5 ring-1 ring-success/15 transition-transform duration-200 group-hover:scale-105 sm:p-2">
               <Image
                 src="/logo.png"
                 alt="বাজার দর"
-                width={64}
-                height={64}
+                width={56}
+                height={56}
                 priority
-                className="h-14 w-14 object-contain"
+                className="size-10 object-contain sm:size-12"
               />
+            </div>
 
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-base-content">
-                  বাজার দর
-                </h1>
+            <div className="min-w-0">
+              <h1 className="truncate text-xl font-extrabold tracking-tight text-base-content sm:text-2xl">
+                বাজার দর
+              </h1>
 
-                <div className="mt-0.5 text-xs font-medium text-base-content/60 sm:text-sm">
-                  <Suspense fallback={<p>তারিখ লোড হচ্ছে...</p>}>
-                    <CurrentDate />
-                  </Suspense>
-                </div>
+              
+
+              <div className="mt-1 hidden text-xs text-base-content/50 sm:block">
+                <Suspense
+                  fallback={
+                    <span className="inline-block h-3 w-24 animate-pulse rounded bg-base-300" />
+                  }
+                >
+                  <CurrentDate />
+                </Suspense>
               </div>
             </div>
           </Link>
-          {/* Actions */}
-          <div className="px-2">
+
+          {/* Header Actions */}
+          <div className="flex shrink-0 items-center gap-2">
             <NavAuthAction />
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex items-center gap-2 overflow-x-auto py-3">
-          <button className="btn btn-sm btn-ghost text-base md:text-lg">
-            <BsListNested size={20} />
-            ক্যাটাগরি
-          </button>
+        {/* Category Navigation */}
+        <Suspense
+          fallback={
+            <div className="flex gap-2 overflow-hidden border-t border-base-300/60 py-3">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="h-10 w-24 shrink-0 animate-pulse rounded-xl bg-base-300"
+                />
+              ))}
+            </div>
+          }
+        >
 
-          {navData.map((item) => (
-            
-            <Link href={item.id}
-              key={item.id}
-              className="btn btn-sm btn-ghost shrink-0 font-medium text-base md:text-lg"
-            >
-              {item.icon}
-              {item.nameBn}
-            </Link>
-            
-          ))}
-        </nav>
+          <CategoryNavigation navData={navData} />
+        </Suspense>
       </div>
     </header>
   );

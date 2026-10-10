@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
@@ -7,6 +8,9 @@ export interface LogInPageProps {
 }
 
 export default function LogInPage() {
+  const handleSignin = () => {
+    console.log("clicked log in")
+  }
   return (
     <>
       <div className="hero bg-base-200 min-h-screen">
@@ -33,7 +37,7 @@ export default function LogInPage() {
                   placeholder="কমপক্ষে ৮ অক্ষর"
                 />
 
-                <button className="btn btn-accent mt-4">সাইন ইন করুন</button>
+                <button onClick={handleSignin} className="btn btn-accent mt-4">সাইন ইন করুন</button>
               </fieldset>
             </div>
           </div>

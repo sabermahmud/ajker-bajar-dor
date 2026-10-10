@@ -6,11 +6,13 @@ import Link from "next/link";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const router = useRouter();
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,10 +52,9 @@ export default function SignUpPage() {
         name,
         email,
         password,
-        callbackURL: "/",
+        callbackURL: "http://localhost:3000",
       });
 
-      console.log(data,error)
 
       if (error) {
         setErrorMessage(error.message || "সাইন আপ করা যায়নি।");
@@ -62,10 +63,11 @@ export default function SignUpPage() {
       }
 
       setSuccessMessage("অ্যাকাউন্ট তৈরি সফল হয়েছে।");
-      toast.success("অ্যাকাউন্ট তৈরি সফল হয়েছে।")
+      toast.success(`${data.user.name}অ্যাকাউন্ট তৈরি সফল হয়েছে।`)
 
-      
-      // form.reset();
+      router.push("/");
+      form.reset();
+
     } catch (error) {
       console.error("Signup failed:", error);
 
@@ -188,7 +190,7 @@ export default function SignUpPage() {
         <div className="divider">অথবা</div>
 
         <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex  flex-col md:flex-row justify-center gap-4">
             <button
               type="button"
               className="btn btn-error text-white"

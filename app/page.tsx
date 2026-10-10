@@ -1,34 +1,36 @@
-import Products from "./Components/Products/Products";
-import { ProductData } from "./types/products-type";
+import Image from "next/image";
+import AllProductsPage from "./allProducts/page";
+import CurrentDate from "./Components/CurrentDate";
+import { Suspense } from "react";
+import Link from "next/link";
 
-const productsDataPromise = async (): Promise<ProductData[]> => {
-  const res = await fetch(
-    "https://openapi.programming-hero.com/api/bazardor/products",
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
-  return res.json();
-};
+
+
 
 export default async function Home() {
-  const products = await productsDataPromise();
 
   return (
     <>
-      {/* সব পণ্য */}
-      <div className="mt-6 flex flex-col gap-6">
-        <div>
-          <h3 className="text-2xl md:text-3xl lg:text-4xl">সব পণ্য</h3>
-          <p className="text-lg mt-1">
-            মোট {products.length.toLocaleString("bn-BD")}টি পণ্য দেখানো হচ্ছে
+      <div className="bg-white my-6 flex flex-col lg:flex-row justify-between">
+         <div>
+          <p>
+            <Suspense fallback={<div>Loading...</div>}>
+              <CurrentDate/>
+            </Suspense>
           </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3   gap-4">
-          {products.map((product) => (
-            <Products key={product.id} product={product} />
-          ))}
-        </div>
+          <h2>আজকের বাজারের দাম এক নজরে</h2>
+          <p>চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।</p>
+          <Link href={"#allProducts"}>
+              <button className="btn btn-success">সব পণ্য দেখুন</button>
+          </Link>
+         </div>
+         <div>
+          <Image src={"/logo.png"} alt="logo" width={400} height={400}/>
+         </div>
+      </div>
+      {/* সব পণ্য */}
+      <div id="allProducts">
+        <AllProductsPage/>
       </div>
     </>
   );

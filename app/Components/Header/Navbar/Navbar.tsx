@@ -8,13 +8,14 @@ import Link from "next/link";
 interface NavDataTypes {
   id: string;
   nameBn: string;
+  icon: string;
 }
 
 const navDataPromise = async (): Promise<NavDataTypes[]> => {
   "use cache";
 
   const res = await fetch(
-    "https://api.api-store.workers.dev/api/bazardor/categories",
+    "https://openapi.programming-hero.com/api/bazardor/categories",
   );
 
   if (!res.ok) {
@@ -65,18 +66,21 @@ export default async function Navbar() {
 
         {/* Navigation */}
         <nav className="flex items-center gap-2 overflow-x-auto py-3">
-          <button className="btn btn-sm btn-ghost">
+          <button className="btn btn-sm btn-ghost text-base md:text-lg">
             <BsListNested size={20} />
             ক্যাটাগরি
           </button>
 
           {navData.map((item) => (
-            <button
+            
+            <Link href={item.id}
               key={item.id}
-              className="btn btn-sm btn-ghost shrink-0 font-medium text-sm md:text-base"
+              className="btn btn-sm btn-ghost shrink-0 font-medium text-base md:text-lg"
             >
+              {item.icon}
               {item.nameBn}
-            </button>
+            </Link>
+            
           ))}
         </nav>
       </div>

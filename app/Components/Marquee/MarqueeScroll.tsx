@@ -3,7 +3,7 @@ import MarqueeData from "./MarqueeData";
 
 const productsDataPromise = async (): Promise<ProductData[]> => {
   const res = await fetch(
-    "https://api.api-store.workers.dev/api/bazardor/products",
+    "https://openapi.programming-hero.com/api/bazardor/products",
   );
   if (!res.ok) {
     throw new Error("Failed to fetch categories");

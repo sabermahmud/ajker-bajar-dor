@@ -7,9 +7,10 @@ import { ToastContainer } from "react-toastify";
 import Marquee from "react-fast-marquee";
 
 import MarqueeScroll from "./Components/Marquee/MarqueeScroll";
+import { Suspense } from "react";
 
 const notoSerifBengali = Noto_Serif_Bengali({
-  subsets:["latin", "bengali"]
+  subsets: ["latin", "bengali"],
 });
 
 export const metadata: Metadata = {
@@ -19,17 +20,29 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" data-theme="dark" className={`${notoSerifBengali.className} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html
+      lang="en"
+      data-theme="light"
+      className={`${notoSerifBengali.className} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-base-300">
         <header className="container mx-auto px-4">
           <nav>
             <Navbar />
           </nav>
         </header>
         <Marquee>
-          <MarqueeScroll/>
+          <Suspense
+            fallback={
+              <div className="bg-white py-2">
+                <p>পণ্যের তথ্য লোড হচ্ছে...</p>
+              </div>
+            }
+          >
+            <MarqueeScroll />
+          </Suspense>
         </Marquee>
-        <ToastContainer/>
+        <ToastContainer />
         <main className="container mx-auto px-4">{children}</main>
         <footer className="container mx-auto px-4">
           <Footer />

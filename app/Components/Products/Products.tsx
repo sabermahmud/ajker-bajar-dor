@@ -15,7 +15,7 @@ export default function Products({ product }: ProductsProps) {
   const isPriceDown = priceChange < 0;
 
   return (
-    <div className="group rounded-2xl border border-gray-200 bg-gray-300/80 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+    <div className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
       {/* Product Information */}
       <div className="flex items-center gap-4">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-4xl">
@@ -42,7 +42,7 @@ export default function Products({ product }: ProductsProps) {
             <span className="text-3xl font-extrabold tracking-tight text-gray-900">
               ৳{product.today.toLocaleString("bn-BD")}
             </span>
-            <span className="text-sm text-gray-500">/ {product.unit}</span>
+            <span className="text-sm text-gray-500">/ কেজি</span>
           </div>
         </div>
 

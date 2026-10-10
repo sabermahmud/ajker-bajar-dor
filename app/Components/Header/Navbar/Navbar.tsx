@@ -3,6 +3,7 @@ import { BsListNested } from "react-icons/bs";
 import CurrentDate from "../../CurrentDate";
 import { Suspense } from "react";
 import NavAuthAction from "./NavAuthAction";
+import Link from "next/link";
 
 interface NavDataTypes {
   id: string;
@@ -31,29 +32,31 @@ export default async function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Top Header */}
         <div className="flex min-h-20 items-center justify-between gap-4">
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo.png"
-              alt="বাজার দর"
-              width={64}
-              height={64}
-              priority
-              className="h-14 w-14 object-contain"
-            />
+          <Link href={"/"}>
+            {/* Logo & Brand */}
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt="বাজার দর"
+                width={64}
+                height={64}
+                priority
+                className="h-14 w-14 object-contain"
+              />
 
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-base-content">
-                বাজার দর
-              </h1>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-base-content">
+                  বাজার দর
+                </h1>
 
-              <div className="mt-0.5 text-xs font-medium text-base-content/60 sm:text-sm">
-                <Suspense fallback={<p>তারিখ লোড হচ্ছে...</p>}>
-                  <CurrentDate />
-                </Suspense>
+                <div className="mt-0.5 text-xs font-medium text-base-content/60 sm:text-sm">
+                  <Suspense fallback={<p>তারিখ লোড হচ্ছে...</p>}>
+                    <CurrentDate />
+                  </Suspense>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
           {/* Actions */}
           <div>
             <NavAuthAction />

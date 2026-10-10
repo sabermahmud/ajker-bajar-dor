@@ -29,7 +29,7 @@ export default async function Navbar() {
 
   return (
     <header className="border-b bg-base-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div>
         {/* Top Header */}
         <div className="flex min-h-20 items-center justify-between gap-4">
           <Link href={"/"}>

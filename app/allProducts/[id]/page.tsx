@@ -149,7 +149,7 @@ async function ProductDetails({ params }: ProductsDetailsPageProps) {
       {/* Product Overview */}
       <section className="overflow-hidden rounded-3xl border border-base-300 bg-base-100 shadow-sm">
         <div className="grid lg:grid-cols-2">
-          <div className="relative flex min-h-72 items-center justify-center overflow-hidden bg-linear-to-br from-success/10 via-base-100 to-success/5 p-8 sm:min-h-96 sm:p-12 lg:min-h-[460px]">
+          <div className="relative flex min-h-72 items-center justify-center overflow-hidden bg-linear-to-br from-success/10 via-base-100 to-success/5 p-8 sm:min-h-96 sm:p-12 lg:min-h-115">
             <div
               aria-hidden="true"
               className="absolute left-1/2 top-1/2 size-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-success/10 blur-3xl sm:size-72"
@@ -354,7 +354,7 @@ async function ProductDetails({ params }: ProductsDetailsPageProps) {
               </div>
 
               <div className="overflow-x-auto">
-                <table className="table w-full min-w-[620px]">
+                <table className="table w-full min-w-155">
                   <thead>
                     <tr className="bg-base-200/70 text-xs uppercase text-base-content/60">
                       <th className="py-4">ক্রম</th>

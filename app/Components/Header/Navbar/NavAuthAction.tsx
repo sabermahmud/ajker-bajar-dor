@@ -86,7 +86,7 @@ export default function NavAuthAction() {
             )}{" "}
           </div>{" "}
         </div>
-        ```
+      
         <div className="hidden text-left sm:block">
           <p className="max-w-32 truncate text-sm font-semibold">
             {user.name || "User"}

@@ -62,6 +62,13 @@ export default function LogInPage() {
     }
   };
 
+  const handleGoogleSignin = async () => {
+  const data = await signIn.social({
+    provider: "google",
+  });
+  console.log(data)
+  }
+
   return (
     <div className="hero bg-base-200 min-h-screen py-10 px-4">
       {" "}
@@ -145,6 +152,7 @@ export default function LogInPage() {
 
             <div className="flex flex-col sm:flex-row justify-center gap-3">
               <button
+              onClick={handleGoogleSignin}
                 type="button"
                 className="btn btn-error text-white flex-1"
                 disabled={isLoading}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { signUp } from "@/app/lib/auth-client";
+import { signIn, signUp } from "@/app/lib/auth-client";
 import Link from "next/link";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
@@ -26,9 +26,7 @@ export default function SignUpPage() {
     const name = String(formData.get("name") ?? "").trim();
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
-    const confirmPassword = String(
-      formData.get("confirmPassword") ?? ""
-    );
+    const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
     if (!name || !email || !password || !confirmPassword) {
       setErrorMessage("সবগুলো ঘর পূরণ করুন।");
@@ -55,42 +53,48 @@ export default function SignUpPage() {
         callbackURL: "http://localhost:3000",
       });
 
-
       if (error) {
         setErrorMessage(error.message || "সাইন আপ করা যায়নি।");
-        toast.error("সাইন আপ করা যায়নি।")
+        toast.error("সাইন আপ করা যায়নি।");
         return;
       }
 
       setSuccessMessage("অ্যাকাউন্ট তৈরি সফল হয়েছে।");
-      toast.success(`${data.user.name} ! অ্যাকাউন্ট তৈরি সফল হয়েছে।`)
+      toast.success(`${data.user.name} ! অ্যাকাউন্ট তৈরি সফল হয়েছে।`);
 
       router.push("/");
       form.reset();
-
     } catch (error) {
       console.error("Signup failed:", error);
 
-      setErrorMessage(
-        "কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।"
-      );
-      toast.error("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।")
+      setErrorMessage("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      toast.error("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGoogleSignin = async () => {
+    const data = await signIn.social({
+      provider: "google",
+    });
+    console.log(data);
+  };
+
+  const handleGithubSignIn = async () => {
+    const data = await signIn.social({
+      provider: "github",
+    });
+    console.log(data);
   };
 
   return (
     <div className="hero bg-base-200 min-h-screen py-10">
       <div className="hero-content flex-col">
         <div className="text-center">
-          <h1 className="text-5xl font-bold">
-            অ্যাকাউন্ট তৈরি করুন
-          </h1>
+          <h1 className="text-5xl font-bold">অ্যাকাউন্ট তৈরি করুন</h1>
 
-          <p className="py-6">
-            বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
-          </p>
+          <p className="py-6">বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।</p>
         </div>
 
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -161,10 +165,7 @@ export default function SignUpPage() {
               )}
 
               {successMessage && (
-                <p
-                  role="status"
-                  className="text-success text-sm mt-3"
-                >
+                <p role="status" className="text-success text-sm mt-3">
                   {successMessage}
                 </p>
               )}
@@ -194,9 +195,7 @@ export default function SignUpPage() {
             <button
               type="button"
               className="btn btn-error text-white"
-              onClick={() =>
-                alert("Google sign-in এখনো যুক্ত করা হয়নি।")
-              }
+              onClick={handleGoogleSignin}
             >
               <FaGoogle className="text-xl" />
               Google দিয়ে চালিয়ে যান
@@ -205,9 +204,7 @@ export default function SignUpPage() {
             <button
               type="button"
               className="btn btn-primary"
-              onClick={() =>
-                alert("GitHub sign-in এখনো যুক্ত করা হয়নি।")
-              }
+              onClick={handleGithubSignIn}
             >
               <FaGithub className="text-xl" />
               GitHub দিয়ে চালিয়ে যান

@@ -69,6 +69,13 @@ export default function LogInPage() {
   console.log(data)
   }
 
+  const handleGithubSignIn = async () => {
+      const data = await signIn.social({
+        provider: "github",
+      });
+      console.log(data);
+    };
+
   return (
     <div className="hero bg-base-200 min-h-screen py-10 px-4">
       {" "}
@@ -162,6 +169,7 @@ export default function LogInPage() {
               </button>
 
               <button
+                onClick={handleGithubSignIn}
                 type="button"
                 className="btn btn-primary flex-1"
                 disabled={isLoading}

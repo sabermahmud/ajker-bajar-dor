@@ -33,6 +33,10 @@ export const auth = betterAuth({
       clientId: googleClientId,
       clientSecret: googleClientSecret,
     },
+     github: { 
+            clientId: process.env.GITHUB_CLIENT_ID as string, 
+            clientSecret: process.env.GITHUB_CLIENT_SECRET as string, 
+        }, 
   },
 
   account: {

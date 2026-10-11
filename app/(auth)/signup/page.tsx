@@ -244,7 +244,7 @@ export default function SignUpPage() {
               {/* Primary action */}
               <button
                 type="submit"
-                className="btn btn-accent h-12 min-h-12 w-full rounded-xl text-base font-bold shadow-lg shadow-primary/15 transition hover:-translate-y-0.5"
+                className="btn bg-green-700 h-12 min-h-12 w-full rounded-xl text-white font-bold shadow-lg shadow-primary/15 transition hover:-translate-y-0.5"
                 disabled={isBusy}
               >
                 {isLoading ? (

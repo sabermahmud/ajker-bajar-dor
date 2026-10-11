@@ -1,24 +1,32 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { signIn, signUp } from "@/app/lib/auth-client";
 import Link from "next/link";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { signIn, signUp } from "@/app/lib/auth-client";
+import {
+  FaGithub,
+  FaGoogle,
+  FaArrowRight,
+  FaUserPlus,
+  FaShieldAlt,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setErrorMessage("");
-    setSuccessMessage("");
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -50,182 +58,274 @@ export default function SignUpPage() {
         name,
         email,
         password,
-        callbackURL: "http://localhost:3000",
+        callbackURL: "/",
       });
 
       if (error) {
         setErrorMessage(error.message || "সাইন আপ করা যায়নি।");
-        toast.error("সাইন আপ করা যায়নি।");
+        toast.error(error.message || "সাইন আপ করা যায়নি।");
         return;
       }
 
-      setSuccessMessage("অ্যাকাউন্ট তৈরি সফল হয়েছে।");
-      toast.success(`${data.user.name} ! অ্যাকাউন্ট তৈরি সফল হয়েছে।`);
+      toast.success(`${data.user.name}, আপনার অ্যাকাউন্ট তৈরি হয়েছে!`);
 
-      router.push("/");
       form.reset();
+      router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Signup failed:", error);
 
       setErrorMessage("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-      toast.error("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      toast.error("সাইন আপ করা যায়নি। আবার চেষ্টা করুন।");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignin = async () => {
-    const data = await signIn.social({
-      provider: "google",
-    });
-    console.log(data);
+  const handleSocialSignIn = async (provider: "google" | "github") => {
+    try {
+      setErrorMessage("");
+      setSocialLoading(provider);
+
+      const { error } = await signIn.social({
+        provider,
+        callbackURL: "/",
+      });
+
+      if (error) {
+        setErrorMessage(error.message || "সাইন আপ করা যায়নি।");
+        toast.error(error.message || "সাইন আপ করা যায়নি।");
+        setSocialLoading("");
+      }
+    } catch (error) {
+      console.error(`${provider} signup failed:`, error);
+
+      setErrorMessage("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      toast.error("আবার চেষ্টা করুন।");
+      setSocialLoading("");
+    }
   };
 
-  const handleGithubSignIn = async () => {
-    const data = await signIn.social({
-      provider: "github",
-    });
-    console.log(data);
-  };
+  const isBusy = isLoading || Boolean(socialLoading);
 
   return (
-    <div className="hero bg-base-200 min-h-screen py-10">
-      <div className="hero-content flex-col">
-        <div className="text-center">
-          <h1 className="text-5xl font-bold">অ্যাকাউন্ট তৈরি করুন</h1>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-base-200 px-4 py-10 sm:px-6">
+      {/* Decorative background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
+      />
 
-          <p className="py-6">বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।</p>
-        </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-accent/10 blur-3xl"
+      />
 
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-          <div className="card-body">
-            <form onSubmit={handleSignUp} className="fieldset">
-              <label htmlFor="name" className="label">
-                নাম
-              </label>
+      <div className="relative w-full max-w-md">
+        <section className="overflow-hidden rounded-3xl border border-base-300/70 bg-base-100 shadow-xl shadow-base-content/5">
+          {/* Matching login page accent */}
+          <div className="h-1.5 bg-linear-to-r from-green-700/30 via-accent to-green-700/30" />
 
-              <input
-                id="name"
-                type="text"
-                className="input w-full"
-                name="name"
-                placeholder="যেমন: রহিম উদ্দিন"
-                autoComplete="name"
-                required
-              />
+          <div className="p-6 sm:p-9">
+            {/* Heading */}
+            <div className="mb-7 text-center">
+              <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                অ্যাকাউন্ট তৈরি করুন
+              </h1>
 
-              <label htmlFor="email" className="label">
-                ইমেইল
-              </label>
+              <p className="mt-3 text-sm leading-6 text-base-content/65">
+                অ্যাকাউন্ট তৈরি করে প্রতিদিনের বাজারদর জানুন, পণ্যের দাম তুলনা
+                করুন এবং সাশ্রয়ী কেনাকাটা করুন।
+              </p>
+            </div>
 
-              <input
-                id="email"
-                type="email"
-                className="input w-full"
-                name="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                required
-              />
+            {/* Signup form */}
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="mb-1.5 block text-sm font-semibold"
+                >
+                  আপনার নাম
+                </label>
 
-              <label htmlFor="password" className="label">
-                পাসওয়ার্ড
-              </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  className="input input-bordered h-12 w-full rounded-xl bg-base-100 transition focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15"
+                  placeholder="যেমন: রহিম উদ্দিন"
+                  autoComplete="name"
+                  required
+                />
+              </div>
 
-              <input
-                id="password"
-                type="password"
-                className="input w-full"
-                name="password"
-                placeholder="কমপক্ষে ৮ অক্ষর"
-                autoComplete="new-password"
-                minLength={8}
-                required
-              />
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-1.5 block text-sm font-semibold"
+                >
+                  ইমেইল ঠিকানা
+                </label>
 
-              <label htmlFor="confirmPassword" className="label">
-                পাসওয়ার্ড নিশ্চিত করুন
-              </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="input input-bordered h-12 w-full rounded-xl bg-base-100 transition focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15"
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  required
+                />
+              </div>
 
-              <input
-                id="confirmPassword"
-                type="password"
-                className="input w-full"
-                name="confirmPassword"
-                placeholder="আবার লিখুন"
-                autoComplete="new-password"
-                minLength={8}
-                required
-              />
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-1.5 block text-sm font-semibold"
+                >
+                  পাসওয়ার্ড
+                </label>
+
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    className="input input-bordered h-12 w-full rounded-xl bg-base-100 pr-12 transition focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15"
+                    placeholder="কমপক্ষে ৮ অক্ষর"
+                    autoComplete="new-password"
+                    minLength={8}
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((previous) => !previous)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-base-content/55 transition hover:text-accent"
+                    aria-label={
+                      showPassword ? "পাসওয়ার্ড লুকান" : "পাসওয়ার্ড দেখুন"
+                    }
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="mb-1.5 block text-sm font-semibold"
+                >
+                  পাসওয়ার্ড নিশ্চিত করুন
+                </label>
+
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  className="input input-bordered h-12 w-full rounded-xl bg-base-100 transition focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15"
+                  placeholder="পাসওয়ার্ড আবার লিখুন"
+                  autoComplete="new-password"
+                  minLength={8}
+                  required
+                />
+              </div>
 
               {errorMessage && (
-                <p role="alert" className="text-error text-sm mt-3">
+                <p
+                  role="alert"
+                  className="rounded-xl border border-error/20 bg-error/10 px-4 py-3 text-sm text-error"
+                >
                   {errorMessage}
                 </p>
               )}
 
-              {successMessage && (
-                <p role="status" className="text-success text-sm mt-3">
-                  {successMessage}
-                </p>
-              )}
-
+              {/* Primary action */}
               <button
                 type="submit"
-                className="btn btn-accent mt-4"
-                disabled={isLoading}
+                className="btn btn-accent h-12 min-h-12 w-full rounded-xl text-base font-bold shadow-lg shadow-primary/15 transition hover:-translate-y-0.5"
+                disabled={isBusy}
               >
                 {isLoading ? (
                   <>
                     <span className="loading loading-spinner loading-sm" />
-                    সাইন আপ হচ্ছে...
+                    অ্যাকাউন্ট তৈরি হচ্ছে...
                   </>
                 ) : (
-                  "সাইন আপ করুন"
+                  <>
+                    <FaUserPlus />
+                    সাইন আপ করুন
+                    <FaArrowRight className="ml-auto" />
+                  </>
                 )}
               </button>
             </form>
+
+            {/* Social login */}
+            <div className="divider my-6 text-xs text-base-content/45">
+              অথবা অন্যভাবে চালিয়ে যান
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => handleSocialSignIn("google")}
+                className="btn h-12 min-h-12 rounded-xl border-base-300 bg-base-100 text-base-content hover:bg-base-200"
+                disabled={isBusy}
+              >
+                {socialLoading === "google" ? (
+                  <span className="loading loading-spinner loading-sm" />
+                ) : (
+                  <FaGoogle className="text-lg text-[#DB4437]" />
+                )}
+                Google
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSocialSignIn("github")}
+                className="btn h-12 min-h-12 rounded-xl border-base-300 bg-base-100 text-base-content hover:bg-base-200"
+                disabled={isBusy}
+              >
+                {socialLoading === "github" ? (
+                  <span className="loading loading-spinner loading-sm" />
+                ) : (
+                  <FaGithub className="text-lg" />
+                )}
+                GitHub
+              </button>
+            </div>
+
+            {/* Login link */}
+            <p className="mt-6 text-center text-sm text-base-content/70">
+              আগে থেকেই অ্যাকাউন্ট আছে?{" "}
+              <Link
+                href="/login"
+                className="font-bold text-green-700 hover:underline"
+              >
+                সাইন ইন করুন
+              </Link>
+            </p>
           </div>
-        </div>
+        </section>
 
-        <div className="divider">অথবা</div>
-
-        <div className="flex flex-col gap-4">
-          <div className="flex  flex-col md:flex-row justify-center gap-4">
-            <button
-              type="button"
-              className="btn btn-error text-white"
-              onClick={handleGoogleSignin}
-            >
-              <FaGoogle className="text-xl" />
-              Google দিয়ে চালিয়ে যান
-            </button>
-
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleGithubSignIn}
-            >
-              <FaGithub className="text-xl" />
-              GitHub দিয়ে চালিয়ে যান
-            </button>
-          </div>
-
-          <p className="text-center">
-            অ্যাকাউন্ট আছে?{" "}
-            <Link className="text-accent" href="/login">
-              সাইন ইন করুন
-            </Link>
+        {/* Footer */}
+        <div className="mt-6 flex flex-col items-center gap-3 text-sm text-base-content/60">
+          <p className="flex items-center gap-2">
+            <FaShieldAlt className="text-green-700" />
+            আপনার অ্যাকাউন্টের নিরাপত্তা আমাদের অগ্রাধিকার।
           </p>
-        </div>
 
-        <div>
-          <Link className="flex items-center gap-2" href="/">
+          <Link
+            href="/"
+            className="flex items-center gap-2 transition hover:text-accent"
+          >
             <GoArrowLeft />
             হোম পেজে ফিরে যান
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

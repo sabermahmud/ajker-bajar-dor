@@ -1,18 +1,26 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { signIn } from "@/app/lib/auth-client";
 import Link from "next/link";
-import { FaGithub, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { signIn } from "@/app/lib/auth-client";
+import {
+  FaGithub,
+  FaGoogle,
+  FaArrowRight,
+  FaSignInAlt,
+  FaShieldAlt,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 export default function LogInPage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const [socialLoading, setSocialLoading] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -40,7 +48,7 @@ export default function LogInPage() {
       const { error } = await signIn.email({
         email,
         password,
-        callbackURL: "http://localhost:3000",
+        callbackURL: "/",
       });
 
       if (error) {
@@ -56,93 +64,135 @@ export default function LogInPage() {
       console.error("Signin failed:", error);
 
       setErrorMessage("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-      toast.error("সাইন ইন করা যায়নি।");
+      toast.error("সাইন ইন করা যায়নি। আবার চেষ্টা করুন।");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignin = async () => {
-  const data = await signIn.social({
-    provider: "google",
-  });
-  console.log(data)
-  }
+  const handleSocialSignIn = async (provider: "google" | "github") => {
+    try {
+      setErrorMessage("");
+      setSocialLoading(provider);
 
-  const handleGithubSignIn = async () => {
-      const data = await signIn.social({
-        provider: "github",
+      const { error } = await signIn.social({
+        provider,
+        callbackURL: "/",
       });
-      console.log(data);
-    };
+
+      if (error) {
+        setErrorMessage(error.message || "সাইন ইন করা যায়নি।");
+        toast.error(error.message || "সাইন ইন করা যায়নি।");
+        setSocialLoading("");
+      }
+    } catch (error) {
+      console.error(`${provider} signin failed:`, error);
+
+      setErrorMessage("কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      toast.error("আবার চেষ্টা করুন।");
+      setSocialLoading("");
+    }
+  };
+
+  const isBusy = isLoading || Boolean(socialLoading);
 
   return (
-    <div className="hero bg-base-200 min-h-screen py-10 px-4">
-      {" "}
-      <div className="hero-content flex-col w-full max-w-md">
-        {" "}
-        <div className="text-center">
-          {" "}
-          <h1 className="text-4xl sm:text-5xl font-bold">সাইন ইন </h1>
-          <p className="py-5 text-base-content/70">
-            বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।
-          </p>
-        </div>
-        <div className="card bg-base-100 w-full shrink-0 shadow-2xl border border-base-300/50">
-          <div className="card-body p-6 sm:p-8">
-            <form onSubmit={handleSignin} className="fieldset gap-1">
-              <label htmlFor="email" className="label">
-                ইমেইল
-              </label>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-base-200 px-4 py-10 sm:px-6">
+      {/* Decorative background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-accent/10 blur-3xl"
+      />
 
-              <input
-                id="email"
-                type="email"
-                className="input input-bordered w-full"
-                name="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                required
-              />
+      <div className="relative w-full max-w-md">
+        
 
-              <label htmlFor="password" className="label mt-3">
-                পাসওয়ার্ড
-              </label>
+        <section className="overflow-hidden rounded-3xl border border-base-300/70 bg-base-100 shadow-xl shadow-base-content/5">
+          <div className="h-1.5 bg-linear-to-r from-green-700/30 via-accent to-green-700/30" />
 
-              <label className="input input-bordered flex w-full items-center gap-2">
+          <div className="p-6 sm:p-9">
+            <div className="mb-7 text-center">
+              
+
+              <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                সাইন ইন
+              </h1>
+
+              <p className="mt-3 text-sm leading-6 text-base-content/65">
+                আপনার অ্যাকাউন্টে সাইন ইন করুন এবং প্রতিদিনের বাজারদর ও পণ্যের
+                দাম সম্পর্কে জানুন।
+              </p>
+            </div>
+
+            <form onSubmit={handleSignin} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-1.5 block text-sm font-semibold"
+                >
+                  ইমেইল ঠিকানা
+                </label>
+
                 <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  className="grow"
-                  name="password"
-                  placeholder="আপনার পাসওয়ার্ড"
-                  autoComplete="current-password"
-                  minLength={8}
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="input input-bordered h-12 w-full rounded-xl bg-base-100 transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
+                  placeholder="you@example.com"
+                  autoComplete="email"
                   required
                 />
+              </div>
 
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((previous) => !previous)}
-                  className="text-base-content/60 hover:text-base-content"
-                  aria-label={
-                    showPassword ? "পাসওয়ার্ড লুকান" : "পাসওয়ার্ড দেখুন"
-                  }
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </label>
+              <div>
+                <div className="mb-1.5 flex items-center justify-between">
+                  <label htmlFor="password" className="text-sm font-semibold">
+                    পাসওয়ার্ড
+                  </label>
+                </div>
+
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    className="input input-bordered h-12 w-full rounded-xl bg-base-100 pr-12 transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
+                    placeholder="আপনার পাসওয়ার্ড"
+                    autoComplete="current-password"
+                    minLength={8}
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((previous) => !previous)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-base-content/55 transition hover:text-accent"
+                    aria-label={
+                      showPassword ? "পাসওয়ার্ড লুকান" : "পাসওয়ার্ড দেখুন"
+                    }
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+              </div>
 
               {errorMessage && (
-                <p role="alert" className="text-error text-sm mt-3">
+                <p
+                  role="alert"
+                  className="rounded-xl border border-error/20 bg-error/10 px-4 py-3 text-sm text-error"
+                >
                   {errorMessage}
                 </p>
               )}
 
               <button
                 type="submit"
-                className="btn btn-accent mt-5 w-full"
-                disabled={isLoading}
+                className="btn btn-accent h-12 min-h-12 w-full rounded-xl text-base font-bold shadow-lg shadow-primary/15 transition hover:-translate-y-0.5"
+                disabled={isBusy}
               >
                 {isLoading ? (
                   <>
@@ -150,56 +200,76 @@ export default function LogInPage() {
                     সাইন ইন হচ্ছে...
                   </>
                 ) : (
-                  "সাইন ইন করুন"
+                  <>
+                    <FaSignInAlt />
+                    সাইন ইন করুন
+                    <FaArrowRight className="ml-auto" />
+                  </>
                 )}
               </button>
             </form>
 
-            <div className="divider my-3 text-base-content/50">অথবা</div>
+            <div className="divider my-6 text-xs text-base-content/45">
+              অথবা অন্যভাবে চালিয়ে যান
+            </div>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <button
-              onClick={handleGoogleSignin}
                 type="button"
-                className="btn btn-error text-white flex-1"
-                disabled={isLoading}
+                onClick={() => handleSocialSignIn("google")}
+                className="btn h-12 min-h-12 rounded-xl border-base-300 bg-base-100 text-base-content hover:bg-base-200"
+                disabled={isBusy}
               >
-                <FaGoogle className="text-xl" />
+                {socialLoading === "google" ? (
+                  <span className="loading loading-spinner loading-sm" />
+                ) : (
+                  <FaGoogle className="text-lg text-[#DB4437]" />
+                )}
                 Google
               </button>
 
               <button
-                onClick={handleGithubSignIn}
                 type="button"
-                className="btn btn-primary flex-1"
-                disabled={isLoading}
+                onClick={() => handleSocialSignIn("github")}
+                className="btn h-12 min-h-12 rounded-xl border-base-300 bg-base-100 text-base-content hover:bg-base-200"
+                disabled={isBusy}
               >
-                <FaGithub className="text-xl" />
+                {socialLoading === "github" ? (
+                  <span className="loading loading-spinner loading-sm" />
+                ) : (
+                  <FaGithub className="text-lg" />
+                )}
                 GitHub
               </button>
             </div>
 
-            <p className="text-center text-sm mt-4">
-              অ্যাকাউন্ট নেই?{" "}
+            <p className="mt-6 text-center text-sm text-base-content/70">
+              নতুন এখানে?{" "}
               <Link
-                className="text-accent font-semibold hover:underline"
                 href="/signup"
+                className="font-bold text-green-700 hover:underline"
               >
-                সাইন আপ করুন
+                অ্যাকাউন্ট তৈরি করুন
               </Link>
             </p>
           </div>
-        </div>
-        <div className="mt-2">
+        </section>
+
+        <div className="mt-6 flex flex-col items-center gap-3 text-sm text-base-content/60">
+          <p className="flex items-center gap-2">
+            <FaShieldAlt className="text-green-700" />
+            নিরাপদে সাইন ইন করুন।
+          </p>
+
           <Link
-            className="flex items-center gap-2 text-sm text-base-content/70 hover:text-accent transition-colors"
             href="/"
+            className="flex items-center gap-2 transition hover:text-accent"
           >
             <GoArrowLeft />
             হোম পেজে ফিরে যান
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

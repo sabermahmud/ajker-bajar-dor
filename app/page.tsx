@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import AllProductsPage from "./allProducts/page";
 import CurrentDate from "./Components/CurrentDate";
+import PriceDroppedProducts from "./Components/PriceDroppedProducts";
+import PriceIncreasedProducts from "./Components/PriceIncreasedProducts";
 
 export default function Home() {
   return (
@@ -84,6 +86,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* PriceDroppedProducts */}
+      <PriceDroppedProducts/>
+
+      {/* PriceIncreasedProducts */}
+      <PriceIncreasedProducts/>
 
       {/* All Products Section */}
       <section id="allProducts" className="scroll-mt-24 py-6">

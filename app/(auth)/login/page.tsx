@@ -109,15 +109,11 @@ export default function LogInPage() {
       />
 
       <div className="relative w-full max-w-md">
-        
-
         <section className="overflow-hidden rounded-3xl border border-base-300/70 bg-base-100 shadow-xl shadow-base-content/5">
           <div className="h-1.5 bg-linear-to-r from-green-700/30 via-accent to-green-700/30" />
 
           <div className="p-6 sm:p-9">
             <div className="mb-7 text-center">
-              
-
               <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
                 সাইন ইন
               </h1>
